@@ -3,6 +3,7 @@ export const LITERS_PER_CUBIC_METER = 1000;
 
 export interface TrenchAreaInput {
   max_month: number;
+  monthly_avg_precipitation: number;
   rain_days_month: number;
   captation_area: number;
   captation_percent: number;
@@ -83,8 +84,20 @@ export function validateInput(input: TrenchAreaInput): TrenchAreaInput {
     "largo de la zanja",
   );
 
+  const monthly_avg_precipitation = requireNonNegative(
+    requireFinite(input.monthly_avg_precipitation, "precipitación promedio mensual"),
+    "precipitación promedio mensual",
+  );
+
+  if (monthly_avg_precipitation > max_month) {
+    throw new CalculatorInputError(
+      "La precipitación promedio mensual no puede ser mayor que la precipitación máxima mensual.",
+    );
+  }
+
   return {
     max_month,
+    monthly_avg_precipitation,
     rain_days_month,
     captation_area,
     captation_percent,
@@ -95,6 +108,7 @@ export function validateInput(input: TrenchAreaInput): TrenchAreaInput {
 export interface CalculatorResult {
   runoff_daily_area: number;
   runoff_per_second: number;
+  normal_daily_area: number;
 }
 
 export function calculate(input: TrenchAreaInput): CalculatorResult {
@@ -109,7 +123,15 @@ export function calculate(input: TrenchAreaInput): CalculatorResult {
   const runoff_daily_area = real_runoff / safe.trench_length_m;
   const runoff_per_second = (real_runoff * LITERS_PER_CUBIC_METER) / SECONDS_PER_DAY;
 
-  return { runoff_daily_area, runoff_per_second };
+  const normal_runoff = overflowPerDay(
+    safe.monthly_avg_precipitation,
+    safe.rain_days_month,
+    safe.captation_area,
+    percentFraction,
+  );
+  const normal_daily_area = normal_runoff / safe.trench_length_m;
+
+  return { runoff_daily_area, runoff_per_second, normal_daily_area };
 }
 
 export function formatNumber(value: number, fractionDigits = 4): string {

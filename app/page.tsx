@@ -19,10 +19,11 @@ export default function Home() {
             Calculadora de zanja de infiltración
           </h1>
           <p className="max-w-2xl text-base text-zinc-600 dark:text-zinc-400">
-            Determina el área de la zanja de infiltración y el caudal de
-            escurrimiento en litros por segundo a partir de la precipitación
-            máxima mensual, los días de lluvia, el área de captación, el
-            porcentaje de captación y el largo de la zanja.
+            Determina el área de la zanja de infiltración para el evento de
+            escurrimiento máximo y para un día de lluvia promedio, además del
+            caudal en litros por segundo, a partir de las precipitaciones
+            máxima y promedio mensuales, los días de lluvia, el área de
+            captación, el porcentaje de captación y el largo de la zanja.
           </p>
         </header>
 
@@ -33,8 +34,9 @@ export default function Home() {
 
         <footer className="pt-4 text-center text-xs text-zinc-500">
           max_day_mm = Pmax / días · max_day_m = max_day_mm / 1000 · runoff =
-          max_day_m × área · excedente = runoff × (% / 100) · área de zanja =
-          excedente / largo (m²) · caudal = excedente × 1000 / 86400 (L/s)
+          max_day_m × área · excedente = runoff × (% / 100) · área zanja =
+          excedente / largo (m²) · caudal = excedente × 1000 / 86400 (L/s) ·
+          área promedio = mismo cálculo con Pprom (m²)
         </footer>
       </main>
     </div>

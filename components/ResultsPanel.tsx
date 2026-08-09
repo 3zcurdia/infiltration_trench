@@ -19,19 +19,25 @@ export default function ResultsPanel({ result }: ResultsPanelProps) {
         Resultados
       </h2>
         <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-          Área de la zanja y caudal de escurrimiento en litros por segundo.
+          Área de la zanja para el escurrimiento máximo y para un día de lluvia
+          promedio, más el caudal en litros por segundo.
         </p>
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <ResultCard
-          title="Área de la zanja"
-          value={hasResult ? `${formatNumber(result.runoff_daily_area, 6)} m²` : "—"}
-          subtitle="Sección transversal necesaria de la zanja"
+          title="Área zanja (escurrimiento)"
+          value={hasResult ? `${formatNumber(result.runoff_daily_area)} m²` : "—"}
+          subtitle="Sección transversal para la lluvia máxima"
         />
         <ResultCard
           title="Escurrimiento por segundo"
           value={hasResult ? `${formatNumber(result.runoff_per_second)} L/s` : "—"}
           subtitle="Caudal de escurrimiento en litros por segundo"
+        />
+        <ResultCard
+          title="Área zanja (promedio)"
+          value={hasResult ? `${formatNumber(result.normal_daily_area)} m²` : "—"}
+          subtitle="Sección transversal para un día de lluvia promedio"
         />
       </div>
 
@@ -43,6 +49,7 @@ export default function ResultsPanel({ result }: ResultsPanelProps) {
           <TrenchGraph
             runoffDailyArea={result?.runoff_daily_area ?? 0}
             runoffPerSecond={result?.runoff_per_second ?? 0}
+            normalDailyArea={result?.normal_daily_area ?? 0}
             active={hasResult}
           />
         </div>
